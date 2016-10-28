@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html>
+  <head>
+      <meta charset="UTF-8">
+      <title>Tamagotchi</title>
+      <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+  </head>
+  <style>
+    .group_of_progress_bar {
+      display: flex;
+    }
+    img {
+      height: 500px;
+      position: absolute;
+   left:20%;
+    }
+  </style>
+  <body>
+
+    <div class="group_of_progress_bar">
+      <div class="container">
+        <h2>Загальний стан</h2>
+        <div class="progress">
+          <div id="health" class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+            <span class="sr-only">Загальний стан</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <h2>Ситість</h2>
+        <div class="progress">
+          <div id="feed_status" class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+            <span class="sr-only">Ситість</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <h2>!Спраглість</h2>
+        <div class="progress">
+          <div id="drink_status" class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+            <span class="sr-only">!Спраглість</span>
+          </div>
+        </div>
+      </div>
+      <div class="container">
+        <h2>Бадьорість</h2>
+        <div class="progress">
+          <div id="sleep_status" class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+            <span class="sr-only">Бадьорість</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="container">
+        <h2>Настрій</h2>
+        <div class="progress">
+          <div id="fun_status" class="progress-bar" role="progressbar" aria-valuenow="70" aria-valuemin="0" aria-valuemax="100">
+            <span class="sr-only">Настрій</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+        <div class="btn-group" >
+          <div class="field col-md-8 col-md-offset-5">
+            <a href="/feed" id="feed" class="btn btn-success">Їсти</a>
+            <a href="/drink" id="drink" class="btn btn-success">Пити</a>
+            <a href="/sleep" id="sleep" class="btn btn-success">Спати</a>
+            <a href="/have_fun" id="have_fun" class="btn btn-success">Веселитись</a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <h3 id="message" align="center"></h3>
+    <img id="pet-img" src="">
+
+
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+    <script>
+      $(document).ready(function() {
+
+        $.ajax({
+          url: 'index.json',
+          context: document.body
+        }).done(function(data) {
+          $('#health').css('width', data.health+'%').attr('aria-valuenow', data.health);
+          $('#feed_status').css('width', data.feed_status+'%').attr('aria-valuenow', data.feed_status);
+          $('#drink_status').css('width', data.drink_status+'%').attr('aria-valuenow', data.drink_status);
+          $('#sleep_status').css('width', data.sleep_status+'%').attr('aria-valuenow', data.sleep_status);
+          $('#fun_status').css('width', data.fun_status+'%').attr('aria-valuenow', data.fun_status);
+          $('#message').text(data.message);
+          $('#pet-img').attr('src', data.image);
+        });
+
+        function messaging(selector, path) {
+          $(selector).on('click', function(e) {
+            e.preventDefault();
+            $.ajax({
+              url: path,
+              context: document.body
+            }).done(function(data) {
+              console.log(data);
+              $('#health').css('width', data.health+'%').attr('aria-valuenow', data.health);
+              $('#feed_status').css('width', data.feed_status+'%').attr('aria-valuenow', data.feed_status);
+              $('#drink_status').css('width', data.drink_status+'%').attr('aria-valuenow', data.drink_status);
+              $('#sleep_status').css('width', data.sleep_status+'%').attr('aria-valuenow', data.sleep_status);
+              $('#fun_status').css('width', data.fun_status+'%').attr('aria-valuenow', data.fun_status);
+              $('#message').text(data.message);
+              $('#pet-img').attr('src', data.image);
+              });
+          })
+        }
+
+        messaging('#feed', '/feed.json');
+        messaging('#drink', '/drink.json');
+        messaging('#sleep', '/sleep.json');
+        messaging('#have_fun', '/have_fun.json');
+
+        messaging('#repeat', '/index.json');
+      })
+    </script>
+  </body>
+</html>
