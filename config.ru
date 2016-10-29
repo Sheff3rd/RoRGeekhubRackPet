@@ -12,7 +12,6 @@ class Pet
       @pet = Tamagotchi.new
       [200, { 'Content-Type' => 'text/html', 'Cache-Control' => 'public, max-age=86400' }, File.open('public/index.html', File::RDONLY)]
     when '/index.json'
-
       result = JSON.generate(
         health: @pet.health,
         feed_status: @pet.feed_status,
@@ -59,8 +58,8 @@ class Pet
         image: '/images/sleep.jpg'
       )
       [200, { 'Content-Type' => 'text/json' }, [result]]
-    when '/have_fun.json'
-      @pet.have_fun
+    when '/fun.json'
+      @pet.fun
       result = JSON.generate(
         health: @pet.health,
         feed_status: @pet.feed_status,
@@ -72,10 +71,9 @@ class Pet
       )
       [200, { 'Content-Type' => 'text/json' }, [result]]
     else
-      not_found = JSON.generate(result: "Error 404. Page not found !")
+      not_found = JSON.generate(result: 'Error 404. Page not found !')
       [404, { 'Content-Type' => 'text/json' }, [not_found]]
     end
-
   end
 end
 
